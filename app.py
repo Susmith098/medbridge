@@ -36,7 +36,8 @@ class TriageResult(BaseModel):
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    maps_key = os.environ.get("GOOGLE_MAPS_API_KEY", "")
+    return render_template('index.html', maps_api_key=maps_key)
 
 @app.route('/api/analyze', methods=['POST'])
 def analyze():
