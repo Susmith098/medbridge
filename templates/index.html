@@ -185,6 +185,82 @@
             font-weight: 600;
         }
 
+        /* Auth & History Styles */
+        .auth-container {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .user-profile {
+            display: none;
+            align-items: center;
+            gap: 0.75rem;
+            background: rgba(255,255,255,0.05);
+            padding: 0.4rem 0.8rem;
+            border-radius: 100px;
+            border: 1px solid var(--card-border);
+        }
+        .user-avatar { width: 24px; height: 24px; border-radius: 50%; }
+        .user-name { font-size: 0.75rem; font-weight: 600; color: var(--text-main); }
+        .btn-auth {
+            background: white;
+            color: black;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.75rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
+        }
+        .btn-auth:hover { background: #f0f0f0; transform: translateY(-1px); }
+        
+        .history-section {
+            margin-top: 1.5rem;
+            display: none;
+        }
+        .history-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.75rem;
+            max-height: 300px;
+            overflow-y: auto;
+            padding-right: 0.5rem;
+        }
+        .history-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--card-border);
+            padding: 0.75rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .history-card:hover {
+            background: rgba(255,255,255,0.06);
+            border-color: var(--primary);
+        }
+        .hist-info h4 { font-size: 0.8rem; margin: 0; color: var(--text-main); }
+        .hist-info p { font-size: 0.65rem; color: var(--text-muted); margin: 2px 0 0 0; }
+        .hist-tag {
+            font-size: 0.6rem;
+            font-weight: 800;
+            padding: 2px 6px;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+        .tag-high { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+        .tag-medium { background: rgba(245, 158, 11, 0.2); color: #f59e0b; }
+        .tag-low { background: rgba(16, 185, 129, 0.2); color: #10b981; }
+
         /* Voice Button */
         .voice-btn {
             position: absolute;
@@ -539,6 +615,17 @@
     <div id="sr-announcer" aria-live="polite" aria-atomic="true" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;"></div>
 
     <header>
+        <div class="auth-container">
+            <div id="user-profile" class="user-profile">
+                <img src="" id="user-avatar" class="user-avatar" alt="">
+                <span id="user-name" class="user-name"></span>
+                <button class="btn-auth" style="background:transparent; color: var(--text-muted); border: 1px solid var(--card-border);" onclick="signOutUser()">Logout</button>
+            </div>
+            <button id="login-btn" class="btn-auth" onclick="signInWithGoogle()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.66l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+                Sign In
+            </button>
+        </div>
         <h1>MedBridge AI</h1>
         <p class="subtitle">UNIVERSAL HEALTH INTENT TRANSLATOR</p>
     </header>
@@ -672,10 +759,21 @@
                     </div>
 
                     <div class="card-actions">
-                        <button class="btn-outline" onclick="showEmergencyCard()">
-                            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                        <button class="btn-outline" onclick="showEmergencyCard()" aria-label="Generate Global Triage Card">
+                            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
                             Generate Global Triage Card
                         </button>
+                    </div>
+
+                    <!-- CLINICAL HISTORY SECTION -->
+                    <div id="history-section" class="history-section">
+                        <div class="result-label" style="display: flex; align-items: center; gap: 0.5rem; margin-top: 1.5rem; border-top: 1px solid var(--card-border); padding-top: 1.5rem;">
+                            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            Patient Case History (Saved)
+                        </div>
+                        <div id="history-list" class="history-grid">
+                            <!-- Populated via Firestore/LocalStorage -->
+                        </div>
                     </div>
                 </div>
             </div>
@@ -812,6 +910,9 @@
                 // Trigger Smart Hospital Finder
                 findNearbyHospitals(data.diagnosis_priority);
 
+                // PERSISTENCE: Save to History
+                saveToHistory(data);
+
             } catch (err) {
                 console.error(err);
                 alert("Connection lost. Resetting UI.");
@@ -939,6 +1040,140 @@
                 );
             }
         });
+    </script>
+
+    <!-- FIREBASE INTEGRATION (v10) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, query, where, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // Firebase Configuration (Replace with your actual Firebase config)
+        const firebaseConfig = {
+            apiKey: "AIza...",
+            authDomain: "medbridge-ai.firebaseapp.com",
+            projectId: "medbridge-ai",
+            storageBucket: "medbridge-ai.appspot.com",
+            messagingSenderId: "...",
+            appId: "..."
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const provider = new GoogleAuthProvider();
+
+        let currentUser = null;
+
+        // AUTHENTICATION
+        window.signInWithGoogle = async () => {
+            try {
+                await signInWithPopup(auth, provider);
+            } catch (error) {
+                console.error("Auth Error:", error);
+                alert("Sign-in failed. Please ensure Firebase is correctly configured in index.html.");
+            }
+        };
+
+        window.signOutUser = () => signOut(auth);
+
+        onAuthStateChanged(auth, (user) => {
+            currentUser = user;
+            const loginBtn = document.getElementById('login-btn');
+            const profile = document.getElementById('user-profile');
+            const historySec = document.getElementById('history-section');
+
+            if (user) {
+                loginBtn.style.display = 'none';
+                profile.style.display = 'flex';
+                document.getElementById('user-avatar').src = user.photoURL;
+                document.getElementById('user-name').innerText = user.displayName;
+                historySec.style.display = 'block';
+            } else {
+                loginBtn.style.display = 'flex';
+                profile.style.display = 'none';
+                historySec.style.display = 'block';
+            }
+            loadHistory();
+        });
+
+        // PERSISTENT HISTORY
+        window.saveToHistory = async (data) => {
+            const historyItem = {
+                ...data,
+                timestamp: new Date().toISOString(),
+                userId: currentUser ? currentUser.uid : 'anonymous'
+            };
+
+            // LocalStorage Save (Always)
+            const localHist = JSON.parse(localStorage.getItem('medbridge_history') || '[]');
+            localHist.unshift(historyItem);
+            localStorage.setItem('medbridge_history', JSON.stringify(localHist.slice(0, 5)));
+
+            // Firestore Save (If Logged In)
+            if (currentUser && firebaseConfig.apiKey !== "AIza...") {
+                try {
+                    await addDoc(collection(db, "triage_history"), historyItem);
+                } catch (e) {
+                    console.error("Firestore Save Error:", e);
+                }
+            }
+            loadHistory();
+        };
+
+        async function loadHistory() {
+            const listEl = document.getElementById('history-list');
+            listEl.innerHTML = '';
+            let cases = [];
+
+            // 1. Fetch from Firestore if logged in
+            if (currentUser && firebaseConfig.apiKey !== "AIza...") {
+                try {
+                    const q = query(collection(db, "triage_history"), 
+                                    where("userId", "==", currentUser.uid), 
+                                    orderBy("timestamp", "desc"), 
+                                    limit(5));
+                    const querySnapshot = await getDocs(q);
+                    querySnapshot.forEach((doc) => cases.push(doc.data()));
+                } catch (e) { console.warn("Could not load from Cloud (Config needed):", e); }
+            }
+
+            // 2. Load from LocalStorage
+            const local = JSON.parse(localStorage.getItem('medbridge_history') || '[]');
+            
+            // 3. Merge & Deduplicate
+            const allItems = [...cases, ...local];
+            const unique = Array.from(new Map(allItems.map(item => [item.timestamp, item])).values())
+                                .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+                                .slice(0, 5);
+
+            if (unique.length === 0) {
+                listEl.innerHTML = '<div style="font-size: 0.7rem; color: var(--text-muted); padding: 1rem; text-align:center;">No recent case history found locally or in cloud.</div>';
+                return;
+            }
+
+            unique.forEach(c => {
+                const card = document.createElement('div');
+                card.className = 'history-card';
+                card.onclick = () => {
+                    lastResult = c;
+                    displayResults(c);
+                    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+                };
+                
+                const date = new Date(c.timestamp).toLocaleDateString();
+                const title = c.pre_fill_form.Primary_Complaint || c.referral.split('.')[0] || 'Case';
+                
+                card.innerHTML = `
+                    <div class="hist-info">
+                        <h4>${title}</h4>
+                        <p>${date} • ${c.language_detected}</p>
+                    </div>
+                    <span class="hist-tag tag-${c.diagnosis_priority.toLowerCase()}">${c.diagnosis_priority}</span>
+                `;
+                listEl.appendChild(card);
+            });
+        }
     </script>
 </body>
 </html>
