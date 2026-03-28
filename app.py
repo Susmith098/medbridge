@@ -169,9 +169,9 @@ def analyze():
 
         logger.info(f"Processing request: lang={target_lang}, has_text={bool(user_text)}, has_image={bool(image_b64)}")
 
-        # Generate structured content using Gemini 2.5 Flash
+        # Generate structured content using Gemini 2.0 Flash
         response = client.models.generate_content(
-            model='gemini-2.5-flash',
+            model='gemini-2.0-flash',
             contents=[
                 "You are a highly advanced medical AI triage system. "
                 "Analyze the following messy, unstructured user input (text and/or image) and convert it into a structured triage result. "
@@ -194,7 +194,7 @@ def analyze():
 
     except Exception as e:
         logger.error(f"Error calling Gemini API: {e}", exc_info=True)
-        return jsonify({"error": "Analysis failed. Please try again."}), 500
+        return jsonify({"error": f"Analysis failed: {str(e)}"}), 500
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
