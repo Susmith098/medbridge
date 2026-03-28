@@ -17,6 +17,7 @@
             --danger: #ef4444;
             --warning: #f59e0b;
             --success: #10b981;
+            --accent: #818cf8;
         }
 
         * {
@@ -35,7 +36,7 @@
             align-items: center;
             background-image: 
                 radial-gradient(circle at 15% 50%, rgba(56, 189, 248, 0.1), transparent 25%),
-                radial-gradient(circle at 85% 30%, rgba(16, 185, 129, 0.05), transparent 25%);
+                radial-gradient(circle at 85% 30%, rgba(129, 140, 248, 0.05), transparent 25%);
         }
 
         header {
@@ -47,7 +48,7 @@
             backdrop-filter: blur(12px);
             position: sticky;
             top: 0;
-            z-index: 10;
+            z-index: 100;
         }
 
         h1 {
@@ -56,95 +57,185 @@
             background: linear-gradient(to right, #38bdf8, #818cf8);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.25rem;
         }
 
         p.subtitle {
             color: var(--text-muted);
-            font-size: 1rem;
+            font-size: 0.9rem;
+            letter-spacing: 0.05em;
         }
 
         main {
             width: 100%;
-            max-width: 1000px;
-            padding: 2.5rem 1.5rem;
+            max-width: 1100px;
+            padding: 2rem 1.5rem;
             display: grid;
             grid-template-columns: 1fr;
             gap: 2rem;
         }
 
-        @media(min-width: 768px) {
+        @media(min-width: 900px) {
             main {
-                grid-template-columns: 1fr 1fr;
+                grid-template-columns: 450px 1fr;
             }
         }
 
         .glass-panel {
             background: var(--card-bg);
             border: 1px solid var(--card-border);
-            border-radius: 16px;
-            padding: 2rem;
+            border-radius: 20px;
+            padding: 1.5rem;
             backdrop-filter: blur(16px);
             box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .glass-panel:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.6), 0 0 20px var(--primary-glow);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.6), 0 0 15px var(--primary-glow);
         }
 
         h2 {
-            font-size: 1.25rem;
+            font-size: 1.1rem;
             margin-bottom: 1rem;
             color: var(--text-main);
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .input-group {
+            position: relative;
         }
 
         textarea {
             width: 100%;
-            height: 150px;
+            height: 140px;
             background: rgba(15, 23, 42, 0.6);
             border: 1px solid var(--card-border);
-            border-radius: 12px;
+            border-radius: 14px;
             padding: 1rem;
             color: var(--text-main);
             font-size: 1rem;
             resize: none;
             outline: none;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+            margin-bottom: 1rem;
         }
 
         textarea:focus {
             border-color: var(--primary);
             box-shadow: 0 0 0 3px var(--primary-glow);
+            background: rgba(15, 23, 42, 0.8);
+        }
+
+        /* Voice Button */
+        .voice-btn {
+            position: absolute;
+            right: 12px;
+            bottom: 24px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--card-border);
+            color: var(--text-muted);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .voice-btn:hover {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 0 15px var(--primary-glow);
+        }
+
+        .voice-btn.listening {
+            background: var(--danger);
+            color: white;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+
+        /* Image Upload */
+        .media-actions {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .file-input-wrapper {
+            flex: 1;
+            position: relative;
+        }
+
+        .file-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px dashed var(--card-border);
+            color: var(--text-muted);
+            padding: 0.75rem;
+            border-radius: 10px;
+            width: 100%;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .file-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(56, 189, 248, 0.05);
+        }
+
+        #image-preview {
+            width: 100%;
+            height: 120px;
+            border-radius: 12px;
+            object-fit: cover;
+            display: none;
+            margin-bottom: 1rem;
+            border: 1px solid var(--card-border);
         }
 
         .btn {
             background: linear-gradient(135deg, #38bdf8, #2563eb);
             color: white;
             border: none;
-            border-radius: 8px;
-            padding: 0.875rem 1.5rem;
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
             width: 100%;
             transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
         }
 
         .btn:hover {
-            box-shadow: 0 0 20px var(--primary-glow);
-            transform: scale(1.02);
+            box-shadow: 0 0 25px var(--primary-glow);
+            transform: translateY(-2px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
         }
 
         .btn:disabled {
-            opacity: 0.7;
+            opacity: 0.6;
             cursor: not-allowed;
             transform: none;
         }
@@ -153,130 +244,202 @@
             display: flex;
             flex-wrap: wrap;
             gap: 0.5rem;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
         }
 
         .chip {
-            background: rgba(56, 189, 248, 0.1);
-            border: 1px solid rgba(56, 189, 248, 0.3);
-            color: var(--primary);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--card-border);
+            color: var(--text-muted);
             padding: 0.4rem 0.8rem;
             border-radius: 20px;
-            font-size: 0.875rem;
+            font-size: 0.75rem;
             cursor: pointer;
             transition: all 0.2s;
         }
 
         .chip:hover {
-            background: rgba(56, 189, 248, 0.2);
-            border-color: var(--primary);
+            background: rgba(129, 140, 248, 0.1);
+            border-color: var(--accent);
+            color: var(--accent);
         }
 
-        /* Results Styles */
-        .result-group {
+        /* Results Display */
+        .priority-box {
+            padding: 1rem;
+            border-radius: 12px;
+            text-align: center;
             margin-bottom: 1.5rem;
-        }
-        
-        .result-label {
-            font-size: 0.875rem;
-            color: var(--text-muted);
-            margin-bottom: 0.25rem;
+            font-weight: 700;
+            font-size: 1.25rem;
+            letter-spacing: 0.1em;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
         }
 
-        .result-value {
-            font-size: 1.125rem;
+        .priority-High { background: rgba(239, 68, 68, 0.15); color: var(--danger); border: 1px solid var(--danger); box-shadow: 0 0 20px rgba(239, 68, 68, 0.2); }
+        .priority-Medium { background: rgba(245, 158, 11, 0.15); color: var(--warning); border: 1px solid var(--warning); }
+        .priority-Low { background: rgba(16, 185, 129, 0.15); color: var(--success); border: 1px solid var(--success); }
+
+        .lang-badge {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-bottom: 0.5rem;
             font-weight: 600;
         }
 
-        .priority-High { color: var(--danger); text-shadow: 0 0 10px rgba(239, 68, 68, 0.4); }
-        .priority-Medium { color: var(--warning); text-shadow: 0 0 10px rgba(245, 158, 11, 0.4); }
-        .priority-Low { color: var(--success); text-shadow: 0 0 10px rgba(16, 185, 129, 0.4); }
+        .translated-text {
+            font-style: italic;
+            color: var(--accent);
+            border-left: 2px solid var(--accent);
+            padding-left: 0.75rem;
+            margin-top: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .result-item {
+            margin-bottom: 1.5rem;
+        }
+
+        .result-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+        }
 
         ul.symptom-list {
             list-style: none;
-            display: flex;
-            flex-direction: column;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             gap: 0.5rem;
         }
 
         ul.symptom-list li {
             background: rgba(255, 255, 255, 0.03);
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            border-left: 3px solid var(--primary);
+            padding: 0.6rem 0.8rem;
+            border-radius: 8px;
+            border-left: 2px solid var(--primary);
+            font-size: 0.9rem;
         }
 
         .form-grid {
             display: grid;
-            grid-template-columns: 1fr;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
             gap: 0.75rem;
         }
         
         .form-item {
-            background: rgba(15, 23, 42, 0.5);
+            background: rgba(15, 23, 42, 0.3);
             padding: 0.75rem;
-            border-radius: 8px;
+            border-radius: 10px;
             border: 1px solid var(--card-border);
         }
-        .form-key {
-            color: var(--text-muted);
-            font-size: 0.75rem;
-            display: block;
-            margin-bottom: 0.25rem;
-        }
-        .form-val {
-            font-size: 0.95rem;
+
+        .form-key { color: var(--text-muted); font-size: 0.7rem; display: block; margin-bottom: 0.25rem; }
+        .form-val { font-size: 0.85rem; font-weight: 500; color: var(--text-main); }
+
+        /* Emergency Card Actions */
+        .card-actions {
+            margin-top: 2rem;
+            display: flex;
+            gap: 1rem;
         }
 
-        #results-container {
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--card-border);
+            color: var(--text-main);
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--text-main);
+        }
+
+        /* Modal / Overlay */
+        #emergency-card-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.95);
+            z-index: 1000;
             display: none;
-            animation: fadeIn 0.5s ease;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            backdrop-filter: blur(8px);
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .emergency-card {
+            background: white;
+            color: black;
+            width: 100%;
+            max-width: 400px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8);
+            border: 4px solid var(--danger);
         }
+
+        .card-header {
+            background: var(--danger);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .card-content {
+            padding: 1.5rem;
+        }
+
+        .card-section {
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 0.5rem;
+        }
+
+        .card-label { font-size: 0.65rem; color: #666; text-transform: uppercase; font-weight: 800; }
+        .card-val { font-size: 1.1rem; font-weight: 700; color: #111; }
 
         .loader {
             display: none;
-            text-align: center;
-            padding: 2rem;
-            color: var(--primary);
-        }
-        
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid rgba(56, 189, 248, 0.2);
-            border-top-color: var(--primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 1rem;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
-        .empty-state {
-            text-align: center;
-            color: var(--text-muted);
-            padding: 3rem 1rem;
-            display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            height: 100%;
+            padding: 4rem 1rem;
         }
-        .empty-state svg {
-            width: 64px;
-            height: 64px;
-            margin-bottom: 1rem;
-            opacity: 0.5;
+
+        .pulse-loader {
+            width: 60px;
+            height: 60px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: pulse-ring 1.5s infinite ease-in-out;
+            margin-bottom: 1.5rem;
         }
+
+        @keyframes pulse-ring {
+            0% { transform: scale(0.8); opacity: 1; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+
+        .hidden { display: none !important; }
 
     </style>
 </head>
@@ -284,166 +447,276 @@
 
     <header>
         <h1>MedBridge AI</h1>
-        <p class="subtitle">Universal Health Intent Translator</p>
+        <p class="subtitle">UNIVERSAL HEALTH INTENT TRANSLATOR</p>
     </header>
 
     <main>
-        <!-- Input Panel -->
-        <div class="glass-panel">
-            <h2>
-                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                </svg>
-                Unstructured Input
-            </h2>
-            <p style="color: var(--text-muted); margin-bottom: 1rem; font-size: 0.9rem;">
-                Paste messy patient history, symptoms, or voice transcriptions.
-            </p>
-            
-            <div class="chips">
-                <div class="chip" onclick="fillExample('chest')">Cardiac Symptoms</div>
-                <div class="chip" onclick="fillExample('fever')">Messy Child Fever</div>
-                <div class="chip" onclick="fillExample('injury')">Accident Report</div>
-            </div>
-
-            <textarea id="medical-input" placeholder="e.g., 'My chest has been hurting since yesterday morning, it feels heavy. I'm 45, male, and I took some aspirin but it didn't help. Little dizzy too.'"></textarea>
-            
-            <button class="btn" id="analyze-btn" onclick="analyzeData()">
-                Translate to Action
-            </button>
-        </div>
-
-        <!-- Output Panel -->
-        <div class="glass-panel" id="output-panel">
-            <div id="empty-state" class="empty-state">
-                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-                <p>Waiting for input...</p>
-                <p style="font-size: 0.8rem; margin-top: 0.5rem;">Results will appear here in structured format.</p>
-            </div>
-
-            <div id="loader" class="loader">
-                <div class="spinner"></div>
-                <p>Analyzing health intent with Gemini...</p>
-            </div>
-
-            <div id="results-container">
+        <!-- INPUT AREA -->
+        <section>
+            <div class="glass-panel" style="margin-bottom: 1.5rem;">
                 <h2>
-                    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-                    </svg>
-                    Triage Assessment
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                    Describe Context
                 </h2>
                 
-                <div style="display: flex; gap: 2rem;">
-                    <div class="result-group">
-                        <div class="result-label">Priority</div>
-                        <div class="result-value" id="res-priority">High</div>
+                <div class="chips">
+                    <div class="chip" onclick="fillExample('hindi')">Patient context (Hindi)</div>
+                    <div class="chip" onclick="fillExample('injury')">Accident Photo Text</div>
+                </div>
+
+                <div class="input-group">
+                    <textarea id="medical-input" placeholder="Speak, type, or upload an image of the symptoms..."></textarea>
+                    <button id="mic-btn" class="voice-btn" title="Speak symptoms">
+                        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3zM19 10v1a7 7 0 01-14 0v-1M12 19v4M8 23h8" /></svg>
+                    </button>
+                </div>
+
+                <div class="media-actions">
+                    <div class="file-input-wrapper">
+                        <input type="file" id="image-input" accept="image/*" class="hidden" onchange="previewImage(this)">
+                        <label for="image-input" class="file-btn">
+                            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><circle cx="12" cy="13" r="3"/></svg>
+                            Vision Analysis (Photo)
+                        </label>
                     </div>
                 </div>
 
-                <div class="result-group">
-                    <div class="result-label">Action / Referral</div>
-                    <div class="result-value" id="res-referral" style="color: var(--text-main);">Go to nearest ER</div>
+                <img id="image-preview" src="">
+
+                <button class="btn" id="analyze-btn" onclick="analyzeData()">
+                    Translate to Life-Saving Action
+                </button>
+            </div>
+        </section>
+
+        <!-- RESULTS AREA -->
+        <section>
+            <div class="glass-panel" id="results-panel" style="min-height: 500px; display: flex; flex-direction: column;">
+                
+                <div id="empty-state" style="margin: auto; text-align: center; color: var(--text-muted);">
+                    <svg style="width: 80px; height: 80px; opacity: 0.2; margin-bottom: 2rem;" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0012 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75z" /></svg>
+                    <p>Analysis Results will appear here.</p>
                 </div>
 
-                <div class="result-group">
-                    <div class="result-label">Detected Symptoms</div>
-                    <ul class="symptom-list" id="res-symptoms">
-                    </ul>
+                <div id="loader" class="loader">
+                    <div class="pulse-loader"></div>
+                    <p style="color: var(--primary); font-weight: 600;">Gemini is interpreting intent...</p>
                 </div>
 
-                <div class="result-group" style="margin-top: 2rem; border-top: 1px solid var(--card-border); padding-top: 1.5rem;">
-                    <h2>
-                        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                            <polyline points="14 2 14 8 20 8"></polyline>
-                            <line x1="16" y1="13" x2="8" y2="13"></line>
-                            <line x1="16" y1="17" x2="8" y2="17"></line>
-                            <polyline points="10 9 9 9 8 9"></polyline>
-                        </svg>
-                        Pre-filled Intake Form
-                    </h2>
-                    <div class="form-grid" id="res-form">
+                <div id="results-container" class="hidden">
+                    <div id="res-lang-detected" class="lang-badge">Detected: English</div>
+                    <div id="res-priority-box" class="priority-box priority-High">High Priority</div>
+
+                    <div class="result-item">
+                        <div class="result-label">Actionable Referral</div>
+                        <div class="result-value" id="res-referral" style="font-weight: 700; font-size: 1.2rem;"></div>
+                        <div id="res-translated-referral" class="translated-text"></div>
+                    </div>
+
+                    <div class="result-item">
+                        <div class="result-label">Life-Saving Actions / Symptoms</div>
+                        <ul class="symptom-list" id="res-symptoms"></ul>
+                    </div>
+
+                    <div class="result-item" style="border-top: 1px solid var(--card-border); padding-top: 1.5rem;">
+                        <div class="result-label">Structured Patient Intake</div>
+                        <div class="form-grid" id="res-form"></div>
+                    </div>
+
+                    <div class="card-actions">
+                        <button class="btn-outline" onclick="showEmergencyCard()">
+                            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                            Generate Nurse Triage Card
+                        </button>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
     </main>
+
+    <!-- EMERGENCY CARD OVERLAY -->
+    <div id="emergency-card-overlay" onclick="closeEmergencyCard()">
+        <div class="emergency-card" onclick="event.stopPropagation()">
+            <div class="card-header">
+                <div style="font-weight: 900; letter-spacing: 0.1em; font-size: 1.5rem;">TRIAGE REPORT</div>
+                <div style="font-size: 0.7rem; opacity: 0.8;">SHOW TO NURSE IMMEDIATELY</div>
+            </div>
+            <div class="card-content">
+                <div class="card-section">
+                    <div class="card-label">Priority Level</div>
+                    <div class="card-val" id="card-priority" style="color: var(--danger);">HIGH</div>
+                </div>
+                <div class="card-section">
+                    <div class="card-label">Primary Action Required</div>
+                    <div class="card-val" id="card-action" style="font-size: 1rem;">Immediate Cardiac Evaluation Required</div>
+                </div>
+                <div class="card-section">
+                    <div class="card-label">Clinical Observations</div>
+                    <div class="card-val" id="card-symptoms" style="font-size: 0.8rem; line-height: 1.4;"></div>
+                </div>
+                <div class="card-section" style="border: none;">
+                    <div class="card-label">Intake Data</div>
+                    <div id="card-data" style="font-size: 0.75rem; font-weight: 600; font-family: monospace;"></div>
+                </div>
+                
+                <button class="btn" onclick="window.print()" style="margin-top: 1rem; background: #333;">Print / Save as PDF</button>
+                <center><a href="#" onclick="closeEmergencyCard()" style="color: #666; font-size: 0.7rem; margin-top: 10px; display: block;">Dismiss</a></center>
+            </div>
+        </div>
+    </div>
 
     <script>
         const examples = {
-            'chest': "My chest has been hurting since yesterday morning, it feels extremely heavy. I'm 45, male, and I took some aspirin but it didn't help at all. Little dizzy too and sweating.",
-            'fever': "uhhh hi yes my daughter Emma is 4 years old, she's been crying all night, forehead is burning up, thermometer said 103.2. She threw up once and won't drink water. No other medical issues.",
-            'injury': "Car accident on highway 5. Driver is conscious but bleeding from head. Says he can't feel his left leg. Was a high speed collision."
+            'hindi': "मेरी छाती में कल रात से तेज दर्द हो रहा है, और मुझे सांस लेने में तकलीफ हो रही है। ऐसा लग रहा है मानो कोई भारी चीज सीने पर रख दी हो। उम्र 52 वर्ष।",
+            'injury': "Severe burn on my hand. I was cooking and spilled hot boiling oil. The skin is peeling off and it hurts a lot. Also have diabetes."
         };
+
+        let currentImageBase64 = null;
+        let lastResult = null;
 
         function fillExample(key) {
             document.getElementById('medical-input').value = examples[key];
         }
 
+        function previewImage(input) {
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('image-preview');
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                    currentImageBase64 = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Voice Recognition Support
+        const micBtn = document.getElementById('mic-btn');
+        if ('webkitSpeechRecognition' in window) {
+            const recognition = new webkitSpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = false;
+
+            recognition.onstart = () => {
+                micBtn.classList.add('listening');
+            };
+
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                document.getElementById('medical-input').value += transcript;
+                micBtn.classList.remove('listening');
+            };
+
+            recognition.onerror = () => micBtn.classList.remove('listening');
+            recognition.onend = () => micBtn.classList.remove('listening');
+
+            micBtn.onclick = () => {
+                recognition.start();
+            };
+        } else {
+            micBtn.style.display = 'none';
+        }
+
         async function analyzeData() {
             const text = document.getElementById('medical-input').value.trim();
-            if (!text) return;
+            if (!text && !currentImageBase64) return;
 
             // UI State
             document.getElementById('empty-state').style.display = 'none';
-            document.getElementById('results-container').style.display = 'none';
-            document.getElementById('loader').style.display = 'block';
+            document.getElementById('results-container').classList.add('hidden');
+            document.getElementById('loader').style.display = 'flex';
             document.getElementById('analyze-btn').disabled = true;
 
             try {
                 const response = await fetch('/api/analyze', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ text })
+                    body: JSON.stringify({ 
+                        text: text,
+                        image: currentImageBase64
+                    })
                 });
 
                 const data = await response.json();
-                
                 if (data.error) {
-                    alert('Error: ' + data.error);
+                    alert('Analysis Error: ' + data.error);
                     resetUI();
                     return;
                 }
 
-                // Populate Data
-                const priorityEl = document.getElementById('res-priority');
-                priorityEl.innerText = data.diagnosis_priority;
-                priorityEl.className = 'result-value priority-' + data.diagnosis_priority;
-
-                document.getElementById('res-referral').innerText = data.referral;
-
-                const sympList = document.getElementById('res-symptoms');
-                sympList.innerHTML = '';
-                data.symptom_checklist.forEach(s => {
-                    const li = document.createElement('li');
-                    li.innerText = s;
-                    sympList.appendChild(li);
-                });
-
-                const formGrid = document.getElementById('res-form');
-                formGrid.innerHTML = '';
-                for (const [key, val] of Object.entries(data.pre_fill_form || {})) {
-                    if (val && typeof val === 'string') {
-                        const item = document.createElement('div');
-                        item.className = 'form-item';
-                        item.innerHTML = `<span class="form-key">${key}</span><span class="form-val">${val}</span>`;
-                        formGrid.appendChild(item);
-                    }
-                }
-
-                document.getElementById('loader').style.display = 'none';
-                document.getElementById('results-container').style.display = 'block';
+                lastResult = data;
+                displayResults(data);
 
             } catch (err) {
                 console.error(err);
-                alert("Failed to connect to server. Ensure the app is running.");
+                alert("Connection lost. Resetting UI.");
                 resetUI();
             } finally {
                 document.getElementById('analyze-btn').disabled = false;
+                document.getElementById('loader').style.display = 'none';
             }
+        }
+
+        function displayResults(data) {
+            document.getElementById('results-container').classList.remove('hidden');
+            
+            // Priority
+            const pbox = document.getElementById('res-priority-box');
+            pbox.innerText = data.diagnosis_priority + " Priority";
+            pbox.className = `priority-box priority-${data.diagnosis_priority}`;
+
+            // Lang & Translation
+            document.getElementById('res-lang-detected').innerText = "Detected: " + (data.language_detected || "Unknown");
+            document.getElementById('res-referral').innerText = data.referral;
+            
+            const transEl = document.getElementById('res-translated-referral');
+            if (data.language_detected !== "English" && data.translated_referral) {
+                transEl.innerText = data.translated_referral;
+                transEl.style.display = 'block';
+            } else {
+                transEl.style.display = 'none';
+            }
+
+            // Symptoms
+            const slist = document.getElementById('res-symptoms');
+            slist.innerHTML = '';
+            (data.symptom_checklist || []).forEach(s => {
+                const li = document.createElement('li');
+                li.innerText = s;
+                slist.appendChild(li);
+            });
+
+            // Form
+            const formGrid = document.getElementById('res-form');
+            formGrid.innerHTML = '';
+            for (const [key, val] of Object.entries(data.pre_fill_form || {})) {
+                if (val) {
+                    const item = document.createElement('div');
+                    item.className = 'form-item';
+                    item.innerHTML = `<span class="form-key">${key.replace('_', ' ')}</span><span class="form-val">${val}</span>`;
+                    formGrid.appendChild(item);
+                }
+            }
+        }
+
+        function showEmergencyCard() {
+            if (!lastResult) return;
+            document.getElementById('card-priority').innerText = lastResult.diagnosis_priority.toUpperCase();
+            document.getElementById('card-priority').style.color = lastResult.diagnosis_priority === 'High' ? '#ef4444' : '#f59e0b';
+            document.getElementById('card-action').innerText = lastResult.referral;
+            document.getElementById('card-symptoms').innerText = lastResult.symptom_checklist.join(', ');
+            
+            let dataHtml = '';
+            for (const [k, v] of Object.entries(lastResult.pre_fill_form || {})) if(v) dataHtml += `${k}: ${v} | `;
+            document.getElementById('card-data').innerText = dataHtml;
+
+            document.getElementById('emergency-card-overlay').style.display = 'flex';
+        }
+
+        function closeEmergencyCard() {
+            document.getElementById('emergency-card-overlay').style.display = 'none';
         }
 
         function resetUI() {
@@ -452,4 +725,5 @@
         }
     </script>
 </body>
+</html></body>
 </html>

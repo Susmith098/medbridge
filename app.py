@@ -27,10 +27,12 @@ class PreFillForm(BaseModel):
 
 class TriageResult(BaseModel):
     diagnosis_priority: str = Field(description="High, Medium, or Low priority based on symptoms")
-    referral: str = Field(description="Suggested next steps (e.g., 'Go to ER immediately', 'Schedule PCP appointment', 'Rest and hydrate')")
+    referral: str = Field(description="Suggested next steps (e.g., 'Go to ER immediately', 'Schedule PCP appointment')")
     symptom_checklist: list[str] = Field(description="List of detected symptoms")
-    nearest_er: str = Field(description="Placeholder text indicating to check local maps for nearest facility")
-    pre_fill_form: PreFillForm = Field(description="Pre-filled patient intake form fields extracted from text")
+    nearest_er: str = Field(description="Placeholder text for local facility")
+    pre_fill_form: PreFillForm = Field(description="Pre-filled patient intake form fields")
+    language_detected: str = Field(description="The language the user input was in (e.g., 'English', 'Hindi', 'Spanish')")
+    translated_referral: str = Field(description="The 'referral' translated into the detected language above")
 
 @app.route('/')
 def index():
@@ -39,10 +41,11 @@ def index():
 @app.route('/api/analyze', methods=['POST'])
 def analyze():
     data = request.json
-    if not data or 'text' not in data:
-        return jsonify({"error": "No text provided"}), 400
+    if not data or ('text' not in data and 'image' not in data):
+        return jsonify({"error": "No input provided"}), 400
         
-    user_text = data['text']
+    user_text = data.get('text', '')
+    image_b64 = data.get('image') # Base64 string
     
     # Check if API key is set, else return mock data (demo mode)
     client = get_client()
@@ -55,20 +58,41 @@ def analyze():
             "nearest_er": "City General Hospital (Demo)",
             "pre_fill_form": {
                 "Primary Complaint": "Chest pain",
-                "Patient Notes": user_text
-            }
+                "Patient Notes": user_text or "Image analyzed"
+            },
+            "language_detected": "English",
+            "translated_referral": "Go to nearest ER immediately"
         })
 
     try:
+        contents = []
+        
+        # Add text if present
+        if user_text:
+            contents.append(f"User Description: {user_text}")
+            
+        # Add image if present
+        if image_b64:
+            # Strip base64 prefix if exists
+            if ',' in image_b64:
+                image_b64 = image_b64.split(',')[1]
+                
+            contents.append(
+                types.Part.from_bytes(
+                    data=image_b64.encode('utf-8'),
+                    mime_type="image/jpeg" # Defaulting to jpeg for simplicity
+                )
+            )
+
         # Generate structured content using Gemini 2.5 Flash
         response = client.models.generate_content(
             model='gemini-2.5-flash',
-            contents=f"""
-                You are a highly advanced medical AI triage system. 
-                Analyze the following messy, unstructured user input and convert it into a structured triage result.
-                
-                User Input: "{user_text}"
-            """,
+            contents=[
+                "You are a highly advanced medical AI triage system. "
+                "Analyze the following messy, unstructured user input (text and/or image) and convert it into a structured triage result. "
+                "Detect the language of the input and provide the 'translated_referral' in that same language.",
+                *contents
+            ],
             config=types.GenerateContentConfig(
                 response_mime_type="application/json",
                 response_schema=TriageResult,
@@ -77,9 +101,12 @@ def analyze():
         )
         
         result_json = response.text
-        # Safety check to ensure it's parseable
         parsed = json.loads(result_json)
         return jsonify(parsed)
+        
+    except Exception as e:
+        print(f"Error calling Gemini: {e}")
+        return jsonify({"error": str(e)}), 500
         
     except Exception as e:
         print(f"Error calling Gemini: {e}")
