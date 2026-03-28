@@ -4,8 +4,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0f172a">
+    <meta name="description" content="MedBridge AI: A universal medical triage assistant that translates messy health inputs into clear clinical actions in any language.">
+    
+    <!-- PWA & SEO -->
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3004/3004458.png">
+    
+    <!-- OpenGraph (Social Media Boost) -->
+    <meta property="og:title" content="MedBridge AI | Universal Health Translator">
+    <meta property="og:description" content="AI-powered medical triage and translator for emergency diagnostics.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://cdn-icons-png.flaticon.com/512/3004/3004458.png">
+    
+    <!-- Structured Data (SEO Score) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "MedicalWebApplication",
+      "name": "MedBridge AI",
+      "description": "Universal Health Intent Translator",
+      "applicationCategory": "Health",
+      "operatingSystem": "Web"
+    }
+    </script>
+
     <title>MedBridge | Health Intent Translator</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Preconnect for Performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-dark: #0f172a;
@@ -1177,6 +1206,14 @@
                     <span class="hist-tag tag-${c.diagnosis_priority.toLowerCase()}">${c.diagnosis_priority}</span>
                 `;
                 listEl.appendChild(card);
+            });
+        }
+        // Service Worker Registration (PWA)
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(reg => console.log('SW Registered', reg))
+                    .catch(err => console.log('SW Failed', err));
             });
         }
     </script>

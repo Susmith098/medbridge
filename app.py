@@ -2,7 +2,7 @@ import os
 import json
 import base64
 import logging
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_from_directory, make_response
 from google import genai
 from google.genai import types
 from pydantic import BaseModel, Field
@@ -83,6 +83,30 @@ def set_security_headers(response):
     response.headers['X-XSS-Protection'] = '1; mode=block'
     response.headers['Referrer-Policy'] = 'strict-origin-when-cross-origin'
     response.headers['Permissions-Policy'] = 'geolocation=(self), microphone=(self)'
+    
+    # Advanced Content Security Policy (CSP)
+    csp = (
+        "default-src 'self'; "
+        "script-src 'self' 'unsafe-inline' https://maps.googleapis.com https://www.gstatic.com https://www.google-analytics.com; "
+        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
+        "font-src 'self' https://fonts.gstatic.com; "
+        "img-src 'self' data: https://maps.gstatic.com https://*.googleapis.com https://*.google-analytics.com https://cdn-icons-png.flaticon.com https://*.googleusercontent.com; "
+        "connect-src 'self' https://*.googleapis.com https://*.google-analytics.com https://medbridge-ai.firebaseapp.com; "
+        "frame-src 'self' https://medbridge-ai.firebaseapp.com; "
+        "object-src 'none';"
+    )
+    response.headers['Content-Security-Policy'] = csp
+    return response
+
+@app.route('/manifest.json')
+def manifest():
+    return send_from_directory('static', 'manifest.json')
+
+@app.route('/service-worker.js')
+def sw():
+    response = make_response(send_from_directory('static', 'service-worker.js'))
+    response.headers['Content-Type'] = 'application/javascript'
+    response.headers['Service-Worker-Allowed'] = '/'
     return response
 
 # ── Routes ─────────────────────────────────────────────────────────────────────
