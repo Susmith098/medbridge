@@ -67,6 +67,7 @@ def analyze():
     try:
         contents = []
         
+        import base64
         # Add text if present
         if user_text:
             contents.append(f"User Description: {user_text}")
@@ -77,9 +78,10 @@ def analyze():
             if ',' in image_b64:
                 image_b64 = image_b64.split(',')[1]
                 
+            image_bytes = base64.b64decode(image_b64)
             contents.append(
                 types.Part.from_bytes(
-                    data=image_b64.encode('utf-8'),
+                    data=image_bytes,
                     mime_type="image/jpeg" # Defaulting to jpeg for simplicity
                 )
             )
