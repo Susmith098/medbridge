@@ -45,46 +45,32 @@ def analyze():
         return jsonify({"error": "No input provided"}), 400
         
     user_text = data.get('text', '')
-    image_b64 = data.get('image') # Base64 string
+    image_b64 = data.get('image')
+    target_lang = data.get('target_language', 'English')
     
-    # Check if API key is set, else return mock data (demo mode)
+    # Check if API key is set, else return mock data
     client = get_client()
     if not client:
-        print("Running in DEMO mode (No API Key found)")
         return jsonify({
             "diagnosis_priority": "High",
-            "referral": "Go to nearest ER immediately",
-            "symptom_checklist": ["Chest pain", "Shortness of breath (simulated)"],
-            "nearest_er": "City General Hospital (Demo)",
-            "pre_fill_form": {
-                "Primary Complaint": "Chest pain",
-                "Patient Notes": user_text or "Image analyzed"
-            },
+            "referral": f"Go to nearest ER (Mocked in {target_lang})",
+            "symptom_checklist": ["Chest pain"],
+            "nearest_er": "City General Hospital",
+            "pre_fill_form": {"Primary Complaint": "Emergency"},
             "language_detected": "English",
-            "translated_referral": "Go to nearest ER immediately"
+            "translated_referral": "Emergency"
         })
 
     try:
         contents = []
-        
         import base64
-        # Add text if present
         if user_text:
             contents.append(f"User Description: {user_text}")
-            
-        # Add image if present
         if image_b64:
-            # Strip base64 prefix if exists
             if ',' in image_b64:
                 image_b64 = image_b64.split(',')[1]
-                
             image_bytes = base64.b64decode(image_b64)
-            contents.append(
-                types.Part.from_bytes(
-                    data=image_bytes,
-                    mime_type="image/jpeg" # Defaulting to jpeg for simplicity
-                )
-            )
+            contents.append(types.Part.from_bytes(data=image_bytes, mime_type="image/jpeg"))
 
         # Generate structured content using Gemini 2.5 Flash
         response = client.models.generate_content(
@@ -92,7 +78,9 @@ def analyze():
             contents=[
                 "You are a highly advanced medical AI triage system. "
                 "Analyze the following messy, unstructured user input (text and/or image) and convert it into a structured triage result. "
-                "Detect the language of the input and provide the 'translated_referral' in that same language.",
+                f"IMPORTANT: The user has requested the results in {target_lang}. "
+                f"You MUST provide ALL string values (referral, symptoms, form keys, and form values) in {target_lang}. "
+                "Detect the source language of the input for the 'language_detected' field.",
                 *contents
             ],
             config=types.GenerateContentConfig(

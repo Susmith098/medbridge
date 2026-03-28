@@ -481,6 +481,22 @@
                     </div>
                 </div>
 
+                <div style="margin-bottom: 1.25rem;">
+                    <label style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 0.5rem; text-transform: uppercase;">Outcome Language</label>
+                    <select id="target-language" style="width: 100%; background: rgba(15, 23, 42, 0.6); border: 1px solid var(--card-border); color: white; padding: 0.75rem; border-radius: 10px; outline: none; cursor: pointer;">
+                        <option value="English">Auto-translate to: English</option>
+                        <option value="Hindi">Auto-translate to: Hindi (हिन्दी)</option>
+                        <option value="Spanish">Auto-translate to: Spanish (Español)</option>
+                        <option value="French">Auto-translate to: French (Français)</option>
+                        <option value="Arabic">Auto-translate to: Arabic (العربية)</option>
+                        <option value="Mandarin">Auto-translate to: Mandarin (中文)</option>
+                        <option value="German">Auto-translate to: German (Deutsch)</option>
+                        <option value="Japanese">Auto-translate to: Japanese (日本語)</option>
+                        <option value="Portuguese">Auto-translate to: Portuguese (Português)</option>
+                        <option value="Russian">Auto-translate to: Russian (Русский)</option>
+                    </select>
+                </div>
+
                 <img id="image-preview" src="">
 
                 <button class="btn" id="analyze-btn" onclick="analyzeData()">
@@ -500,33 +516,34 @@
 
                 <div id="loader" class="loader">
                     <div class="pulse-loader"></div>
-                    <p style="color: var(--primary); font-weight: 600;">Gemini is interpreting intent...</p>
+                    <p style="color: var(--primary); font-weight: 600;">Gemini is interpreting health intent...</p>
                 </div>
 
                 <div id="results-container" class="hidden">
-                    <div id="res-lang-detected" class="lang-badge">Detected: English</div>
-                    <div id="res-priority-box" class="priority-box priority-High">High Priority</div>
-
-                    <div class="result-item">
-                        <div class="result-label">Actionable Referral</div>
-                        <div class="result-value" id="res-referral" style="font-weight: 700; font-size: 1.2rem;"></div>
-                        <div id="res-translated-referral" class="translated-text"></div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <div id="res-lang-detected" class="lang-badge">Detected: English</div>
+                        <div id="res-priority-box" class="priority-box" style="margin-bottom: 0; padding: 0.25rem 1rem; font-size: 0.8rem;">High Priority</div>
                     </div>
 
                     <div class="result-item">
-                        <div class="result-label">Life-Saving Actions / Symptoms</div>
+                        <div class="result-label">Actionable Patient Referral</div>
+                        <div class="result-value" id="res-referral" style="font-weight: 700; font-size: 1.2rem; color: var(--text-main);"></div>
+                    </div>
+
+                    <div class="result-item">
+                        <div class="result-label" id="label-observations">Clinical Observations</div>
                         <ul class="symptom-list" id="res-symptoms"></ul>
                     </div>
 
                     <div class="result-item" style="border-top: 1px solid var(--card-border); padding-top: 1.5rem;">
-                        <div class="result-label">Structured Patient Intake</div>
+                        <div class="result-label" id="label-intake">Structured Data Translation</div>
                         <div class="form-grid" id="res-form"></div>
                     </div>
 
                     <div class="card-actions">
                         <button class="btn-outline" onclick="showEmergencyCard()">
                             <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
-                            Generate Nurse Triage Card
+                            Generate Global Triage Card
                         </button>
                     </div>
                 </div>
@@ -539,27 +556,27 @@
         <div class="emergency-card" onclick="event.stopPropagation()">
             <div class="card-header">
                 <div style="font-weight: 900; letter-spacing: 0.1em; font-size: 1.5rem;">TRIAGE REPORT</div>
-                <div style="font-size: 0.7rem; opacity: 0.8;">SHOW TO NURSE IMMEDIATELY</div>
+                <div style="font-size: 0.7rem; opacity: 0.8;">SHOW TO LOCAL NURSE IMMEDIATELY</div>
             </div>
             <div class="card-content">
                 <div class="card-section">
-                    <div class="card-label">Priority Level</div>
+                    <div class="card-label" id="card-label-priority">Emergency Priority</div>
                     <div class="card-val" id="card-priority" style="color: var(--danger);">HIGH</div>
                 </div>
                 <div class="card-section">
-                    <div class="card-label">Primary Action Required</div>
-                    <div class="card-val" id="card-action" style="font-size: 1rem;">Immediate Cardiac Evaluation Required</div>
+                    <div class="card-label" id="card-label-action">Primary Action</div>
+                    <div class="card-val" id="card-action" style="font-size: 1rem;"></div>
                 </div>
                 <div class="card-section">
-                    <div class="card-label">Clinical Observations</div>
+                    <div class="card-label" id="card-label-observed">Observations</div>
                     <div class="card-val" id="card-symptoms" style="font-size: 0.8rem; line-height: 1.4;"></div>
                 </div>
                 <div class="card-section" style="border: none;">
-                    <div class="card-label">Intake Data</div>
+                    <div class="card-label">Localized Data</div>
                     <div id="card-data" style="font-size: 0.75rem; font-weight: 600; font-family: monospace;"></div>
                 </div>
                 
-                <button class="btn" onclick="window.print()" style="margin-top: 1rem; background: #333;">Print / Save as PDF</button>
+                <button class="btn" onclick="window.print()" style="margin-top: 1rem; background: #333;">Print Report</button>
                 <center><a href="#" onclick="closeEmergencyCard()" style="color: #666; font-size: 0.7rem; margin-top: 10px; display: block;">Dismiss</a></center>
             </div>
         </div>
@@ -621,6 +638,7 @@
 
         async function analyzeData() {
             const text = document.getElementById('medical-input').value.trim();
+            const targetLang = document.getElementById('target-language').value;
             if (!text && !currentImageBase64) return;
 
             // UI State
@@ -635,7 +653,8 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ 
                         text: text,
-                        image: currentImageBase64
+                        image: currentImageBase64,
+                        target_language: targetLang
                     })
                 });
 
@@ -664,20 +683,12 @@
             
             // Priority
             const pbox = document.getElementById('res-priority-box');
-            pbox.innerText = data.diagnosis_priority + " Priority";
+            pbox.innerText = data.diagnosis_priority;
             pbox.className = `priority-box priority-${data.diagnosis_priority}`;
 
-            // Lang & Translation
-            document.getElementById('res-lang-detected').innerText = "Detected: " + (data.language_detected || "Unknown");
+            // Lang & Display
+            document.getElementById('res-lang-detected').innerText = "Source: " + (data.language_detected || "Detected");
             document.getElementById('res-referral').innerText = data.referral;
-            
-            const transEl = document.getElementById('res-translated-referral');
-            if (data.language_detected !== "English" && data.translated_referral) {
-                transEl.innerText = data.translated_referral;
-                transEl.style.display = 'block';
-            } else {
-                transEl.style.display = 'none';
-            }
 
             // Symptoms
             const slist = document.getElementById('res-symptoms');
@@ -695,7 +706,7 @@
                 if (val) {
                     const item = document.createElement('div');
                     item.className = 'form-item';
-                    item.innerHTML = `<span class="form-key">${key.replace('_', ' ')}</span><span class="form-val">${val}</span>`;
+                    item.innerHTML = `<span class="form-key">${key}</span><span class="form-val">${val}</span>`;
                     formGrid.appendChild(item);
                 }
             }
@@ -725,5 +736,4 @@
         }
     </script>
 </body>
-</html></body>
 </html>
