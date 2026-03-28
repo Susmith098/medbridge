@@ -854,6 +854,16 @@
             document.getElementById('loader').style.display = 'none';
             document.getElementById('empty-state').style.display = 'flex';
         }
+
+        // Request location permission on page load for a smoother experience later
+        window.addEventListener('load', () => {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    () => console.log("Location access granted"),
+                    (e) => console.log("Location access denied or unavailable", e)
+                );
+            }
+        });
     </script>
 </body>
 </html>
