@@ -474,6 +474,43 @@
 
         .hidden { display: none !important; }
 
+        @media print {
+            body {
+                background: white;
+                color: black;
+                margin: 0;
+                padding: 0;
+            }
+            body * {
+                visibility: hidden;
+            }
+            #emergency-card-overlay, #emergency-card-overlay * {
+                visibility: visible;
+            }
+            #emergency-card-overlay {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                background: white !important;
+                display: flex !important;
+                align-items: flex-start !important;
+                justify-content: center !important;
+                padding: 0 !important;
+            }
+            .emergency-card {
+                box-shadow: none !important;
+                border: 2px solid #ccc !important;
+                width: 100% !important;
+                max-width: 800px !important; /* Full page width */
+                margin: 0 !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+        }
+
     </style>
 </head>
 <body>
