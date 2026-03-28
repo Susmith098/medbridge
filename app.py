@@ -17,12 +17,20 @@ def get_client():
         return None
     return genai.Client(api_key=api_key)
 
+class PreFillForm(BaseModel):
+    Age: str | None = Field(default=None, description="Patient's age")
+    Gender: str | None = Field(default=None, description="Patient's gender")
+    Primary_Complaint: str | None = Field(default=None, description="Primary complaint", alias="Primary Complaint")
+    Duration: str | None = Field(default=None, description="Duration of symptoms")
+    Medical_History: str | None = Field(default=None, description="Relevant medical history", alias="Medical History")
+    Allergies: str | None = Field(default=None, description="Known allergies")
+
 class TriageResult(BaseModel):
     diagnosis_priority: str = Field(description="High, Medium, or Low priority based on symptoms")
     referral: str = Field(description="Suggested next steps (e.g., 'Go to ER immediately', 'Schedule PCP appointment', 'Rest and hydrate')")
     symptom_checklist: list[str] = Field(description="List of detected symptoms")
     nearest_er: str = Field(description="Placeholder text indicating to check local maps for nearest facility")
-    pre_fill_form: dict[str, str] = Field(description="Pre-filled patient intake form fields extracted from text, like Age, Gender, Primary Complaint, Duration")
+    pre_fill_form: PreFillForm = Field(description="Pre-filled patient intake form fields extracted from text")
 
 @app.route('/')
 def index():
