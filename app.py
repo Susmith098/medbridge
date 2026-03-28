@@ -10,9 +10,12 @@ load_dotenv()
 
 app = Flask(__name__)
 
-# Initialize Gemini Client
-# It automatically picks up GEMINI_API_KEY from environment variables
-client = genai.Client()
+# Initialize Gemini Client Lazy-Loader
+def get_client():
+    api_key = os.environ.get("GEMINI_API_KEY")
+    if not api_key:
+        return None
+    return genai.Client(api_key=api_key)
 
 class TriageResult(BaseModel):
     diagnosis_priority: str = Field(description="High, Medium, or Low priority based on symptoms")
@@ -34,7 +37,8 @@ def analyze():
     user_text = data['text']
     
     # Check if API key is set, else return mock data (demo mode)
-    if not os.environ.get("GEMINI_API_KEY"):
+    client = get_client()
+    if not client:
         print("Running in DEMO mode (No API Key found)")
         return jsonify({
             "diagnosis_priority": "High",
